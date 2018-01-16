@@ -1,0 +1,36 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".fragments.SelectAccountForSingInFragment">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/registered_users"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <GridView
+            android:id="@+id/users"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/login_avatars_grid_height"
+            android:layout_gravity="center"
+            android:columnWidth="@dimen/avatar_size"
+            android:numColumns="2"
+            android:horizontalSpacing="@dimen/login_avatars_horizontal_spacing"
+            android:verticalSpacing="@dimen/login_avatars_vertical_spacing"
+            tools:listitem="@layout/avatar_layout"/>
+
+        <Button
+            android:id="@+id/create_account"
+            style="@style/AppTheme.TransparentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/create_new_account"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</FrameLayout>

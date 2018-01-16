@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.virgilsecurity.chat.nexmo.ConversationActivity">
+
+    <EditText
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="100"
+        android:inputType="text"
+        app:layout_constraintLeft_toLeftOf="@id/layout_content"
+        app:layout_constraintRight_toLeftOf="@id/sentButton"
+        app:layout_constraintBottom_toBottomOf="@id/layout_content"/>
+
+    <ImageButton
+        android:id="@+id/sentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_send"
+        app:layout_constraintTop_toTopOf="@id/message"
+        app:layout_constraintRight_toRightOf="@id/layout_content"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/messages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/message_list_item"
+        app:layout_constraintTop_toTopOf="@id/layout_content"
+        app:layout_constraintBottom_toTopOf="@id/message"/>
+
+</android.support.constraint.ConstraintLayout>

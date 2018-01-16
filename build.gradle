@@ -1,0 +1,37 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.versions = [
+            virgil_sdk: '4.6.0',
+            virgil_pfs: '1.1.2',
+            kotlin : '1.1.51',
+            room : '1.0.0',
+            livecycle : '1.0.0',
+            retrofit  : '2.3.0',
+            okhttp    : '3.6.0'
+    ]
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://artifactory.ess-dev.com/artifactory/gradle-dev' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

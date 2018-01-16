@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#20232B</color>
+    <color name="primary_dark">#000000</color>
+    <color name="accent">#80CBC4</color>
+
+    <!-- Text -->
+    <color name="text_color_primary">#FFFFFF</color>
+    <color name="text_color_secondary">#FFFFFF</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="body1_color">#969A9E</color>
+
+    <!-- Button -->
+    <color name="btn_bg_color_enabled">#9E3621</color>
+    <color name="btn_bg_color_disabled">#464B53</color>
+
+    <!-- Edit text -->
+    <color name="et_hint_color">#7A7D84</color>
+
+    <!--Login -->
+</resources>

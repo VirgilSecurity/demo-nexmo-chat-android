@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/option_contacts"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="@string/contacts" />
+        <item
+            android:id="@+id/option_chats"
+            android:icon="@drawable/ic_forum_black_24dp"
+            android:title="@string/chats" />
+        <item
+            android:id="@+id/option_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/settings" />
+    </group>
+</menu>

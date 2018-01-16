@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".fragments.NoAccountsFragment">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/no_registered_users"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:layout_gravity="center" >
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
+            android:layout_marginBottom="@dimen/login_avatar_margin_btm"
+            android:src="@drawable/avatar" />
+
+        <TextView
+            android:id="@+id/create_your_acc"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/login_large_text_margin_btm"
+            android:fontFamily="sans-serif"
+            android:text="@string/create_your_account" />
+
+        <TextView
+            android:id="@+id/it_takes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/it_take_a_few_seconds" />
+
+        <Button
+            android:id="@+id/create_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_create_btn_margin_top"
+            android:text="@string/create_new_account"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</FrameLayout>

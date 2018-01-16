@@ -1,0 +1,26 @@
+<resources>
+    <!-- Common -->
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Icon -->
+    <dimen name="avatar_size">80dp</dimen>
+
+    <!-- Button -->
+    <dimen name="btn_text_padding">10dp</dimen>
+
+    <!-- Login screen -->
+    <dimen name="login_avatar_margin_btm">18dp</dimen>
+    <dimen name="login_large_text_margin_btm">10dp</dimen>
+    <dimen name="login_create_btn_margin_top">70dp</dimen>
+    <dimen name="login_avatars_grid_height">200dp</dimen>
+    <dimen name="login_avatars_vertical_spacing">18dp</dimen>
+    <dimen name="login_avatars_horizontal_spacing">18dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+</resources>
