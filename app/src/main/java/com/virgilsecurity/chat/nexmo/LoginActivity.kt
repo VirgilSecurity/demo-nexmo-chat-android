@@ -77,8 +77,25 @@ class LoginActivity : FragmentActivity(), OnCreateNewUserListener, OnSelectUserL
 
     private fun loginNexmo(userName: String, jwt: String) {
         val conversationClient = NexmoApp.instance.conversationClient
-        val token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYwODQ3OTcsImp0aSI6IjExYzg4NjYwLWZhODgtMTFlNy05ZGRmLTYxYjRiZTBlOTY2YyIsInN1YiI6ImE1IiwiZXhwIjoiMTUxNjE3MTE5NyIsImFjbCI6eyJwYXRocyI6eyIvdjEvc2Vzc2lvbnMvKioiOnt9LCIvdjEvdXNlcnMvKioiOnt9LCIvdjEvY29udmVyc2F0aW9ucy8qKiI6e319fSwiYXBwbGljYXRpb25faWQiOiJhMGRlNTZjZS0wYjYxLTQxNzctYjdkOS1jMDg1OGEwNmE4MTcifQ.b3pM2HXtwKhao-sg3uymJR5Qk8uKujgrlO4kKf30tdRhTQX_j7gMfGwoayOuStqgPveiitr-3F62JkrsZBwWW4knUt6B4FzwrnPPnjfef4nW-3Oe_CdJlTrq1f6gow6RPjeAz-sYlvBSTIDH9ZjapxhCAbNoTE-bwoTQNPSvb6y0cFWqYKuxc4_n83b64gzq8dm_C4IyKSbrGIXKovMnB1rX9barEw6iuSTlFkxqhlaZcTJwhVPPyms2VQd7w5FV-o5SvFoMmnMLQbGoRFM-hGstL5EXTxi4v_uo6nnxVqfpLC0vTCg8Aqb5_vyjgop-3YnrmWtAecnDAvE4Hyefyw"
-        conversationClient.login(token, object: RequestHandler<User> {
+        if (conversationClient.isLoggedIn) {
+            conversationClient.logout(object: RequestHandler<Void> {
+                override fun onSuccess(result: Void?) {
+                    doLogin(userName, jwt)
+                }
+
+                override fun onError(apiError: NexmoAPIError?) {
+                    Log.e(TAG, "Logout failed", apiError)
+                }
+
+            })
+        } else {
+            doLogin(userName, jwt)
+        }
+    }
+
+    private fun doLogin(userName: String, jwt: String) {
+        val conversationClient = NexmoApp.instance.conversationClient
+        conversationClient.login(jwt, object: RequestHandler<User> {
             override fun onSuccess(result: User?) {
                 Log.d(TAG, "Logged in to Nexmo")
                 openMainActivity(userName, jwt)
@@ -120,7 +137,7 @@ class LoginActivity : FragmentActivity(), OnCreateNewUserListener, OnSelectUserL
         var fragmentTransaction = supportFragmentManager
                 .beginTransaction()
         fragmentTransaction.replace(R.id.content, newFragment, "rageComicList")
-                .commit()
+                .commitAllowingStateLoss()
     }
 
 }

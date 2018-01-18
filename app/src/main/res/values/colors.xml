@@ -17,5 +17,9 @@
     <!-- Edit text -->
     <color name="et_hint_color">#7A7D84</color>
 
+    <!--Message -->
+    <color name="my_message_bg">#4C5058</color>
+    <color name="member_message_bg">#25282F</color>
+
     <!--Login -->
 </resources>

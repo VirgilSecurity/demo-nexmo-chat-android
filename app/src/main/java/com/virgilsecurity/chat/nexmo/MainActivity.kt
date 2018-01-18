@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.virgilsecurity.chat.nexmo.adapters.ConversationsRecyclerViewAdapter
 import com.virgilsecurity.chat.nexmo.fragments.ContactsFragment
 import com.virgilsecurity.chat.nexmo.fragments.ConversationsFragment
 import com.virgilsecurity.chat.nexmo.http.model.NexmoUser
@@ -76,14 +77,17 @@ class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragme
     }
 
     override fun onContactSelectedFragmentInteraction(item: NexmoUser) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("user", item.id)
+        val intent = Intent(this, ConversationActivity::class.java)
+        intent.putExtra("user_id", item.id)
+        intent.putExtra("user_name", item.name)
+        intent.putExtra("title", item.name)
         startActivity(intent)
     }
 
-    override fun onConversationSelectedFragmentInteraction(id: String) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("conversation", id)
+    override fun onConversationSelectedFragmentInteraction(conversation: ConversationsRecyclerViewAdapter.ConversationDto) {
+        val intent = Intent(this, ConversationActivity::class.java)
+        intent.putExtra("conversation_id", conversation.conversationId)
+        intent.putExtra("title", conversation.name)
         startActivity(intent)
     }
 

@@ -106,11 +106,11 @@ class JsonFileUserDataStorage(private val directoryName: String, private val fil
                 }
 
                 val bytes = os.toByteArray()
-
-                return gson.fromJson(String(bytes, Charset.forName("UTF-8")), Storages::class.java)
+                val string = String(bytes, Charset.forName("UTF-8"))
+                return gson.fromJson(string, Storages::class.java)
             }
         } catch (e: Exception) {
-            throw KeyStorageException(e)
+            return Storages()
         }
 
     }

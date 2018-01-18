@@ -49,6 +49,7 @@ class ContactsFragment : Fragment() {
                     Log.d(TAG, "${users.size} users found")
                     mUsersList.clear()
                     mUsersList.addAll(users)
+                    mUsersList.sortWith(compareBy(NexmoUser::name))
 
                     mHandler.post {
                         mAdapter?.notifyDataSetChanged()

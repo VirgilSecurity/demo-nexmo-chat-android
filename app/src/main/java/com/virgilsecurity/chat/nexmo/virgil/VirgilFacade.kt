@@ -23,14 +23,17 @@ import com.virgilsecurity.sdk.crypto.exceptions.DecryptionException
 import com.virgilsecurity.sdk.crypto.exceptions.EncryptionException
 import com.virgilsecurity.sdk.utils.ConvertionUtils
 import com.virgilsecurity.sdk.crypto.PrivateKey
+import com.virgilsecurity.sdk.device.DefaultDeviceManager
+import com.virgilsecurity.sdk.securechat.SecureChat
+import com.virgilsecurity.sdk.securechat.SecureChatContext
 
 
 class VirgilFacade {
     private val TAG = "NexmoVirgilFacade"
 
     private val context: Context
-    private val crypto: Crypto
-    private val virgilApi: VirgilApi
+    val crypto: Crypto
+    val virgilApi: VirgilApi
     private val authClient: VirgilAuthClient
 
     private var keyStorage: KeyStorage? = null
@@ -39,6 +42,8 @@ class VirgilFacade {
 
     private var identity: String? = null
     private var virgilCard: CardModel? = null
+
+    private var secureChat: SecureChat? = null
 
     constructor() {
         context = NexmoApp.instance.applicationContext
@@ -112,6 +117,20 @@ class VirgilFacade {
         return null
     }
 
+    fun encrypt(text: String, recipientCard: CardModel): String {
+        var secureSession = secureChat!!.activeSession(recipientCard.getId());
+        if (secureSession == null) {
+            secureSession = secureChat!!.startNewSession(recipientCard, null);
+        }
+        val encryptedText = secureSession.encrypt(text);
+        return encryptedText
+    }
+
+    fun decrypt(encryptedMessage: String, senderCard: CardModel): String {
+        var secureSession = secureChat!!.loadUpSession(senderCard, encryptedMessage, null);
+        return secureSession.decrypt(encryptedMessage);
+    }
+
     @Throws(GetVirgilTokenException::class)
     private fun getVirgilToken(identity: String, cardId: String): String {
         val challengeMessage = this.authClient.getChallengeMessage(cardId)
@@ -152,6 +171,16 @@ class VirgilFacade {
                 userName + ".ks")
         this.userDataStorage = JsonFileUserDataStorage(context.getFilesDir().getAbsolutePath(),
                 userName + ".ds")
+
+        // Configure PFS
+        var chatContext = SecureChatContext(this.virgilCard, this.privateKey, this.crypto,
+                VIRGIL_ACCESS_TOKEN)
+        chatContext.keyStorage = keyStorage
+        chatContext.deviceManager = DefaultDeviceManager()
+        chatContext.userDataStorage = userDataStorage
+
+        secureChat = SecureChat(chatContext)
+        secureChat?.rotateKeys(10)
     }
 
     companion object {
