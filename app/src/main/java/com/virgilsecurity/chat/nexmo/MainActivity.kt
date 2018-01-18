@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.virgilsecurity.chat.nexmo.adapters.ConversationsRecyclerViewAdapter
 import com.virgilsecurity.chat.nexmo.fragments.ContactsFragment
 import com.virgilsecurity.chat.nexmo.fragments.ConversationsFragment
 import com.virgilsecurity.chat.nexmo.http.model.NexmoUser
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragmentInteractionListener, ConversationsFragment.OnSelectConversationFragmentInteractionListener {
     private val TAG = "NexmoMain"
@@ -43,6 +45,8 @@ class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragme
     private fun initNavigationDrawer() {
         // refer the navigation view of the xml
         val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+        navigationView.getHeaderView(0).findViewById<TextView>(R.id.username).text = NexmoApp.instance.conversationClient.user.name
+
         navigationView.setNavigationItemSelectedListener { menuItem ->
             val id = menuItem.itemId
             when (id) {
@@ -55,13 +59,12 @@ class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragme
                     drawerLayout!!.closeDrawers()
                 }
                 R.id.option_settings -> {
-                    Toast.makeText(applicationContext, "Settings", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Not implemented yet", Toast.LENGTH_SHORT).show()
                     drawerLayout!!.closeDrawers()
                 }
             }
             true
         }
-        val header = navigationView.getHeaderView(0)
         drawerLayout = findViewById(R.id.drawer)
         val actionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             override fun onDrawerClosed(v: View?) {

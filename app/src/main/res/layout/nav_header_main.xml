@@ -14,9 +14,9 @@
         app:srcCompat="@drawable/person_welcome_screen"/>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/username"
         style="@style/TextAppearance.AppCompat.Display1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"/>
+        android:text="Username"/>
 </android.support.v7.widget.LinearLayoutCompat>
