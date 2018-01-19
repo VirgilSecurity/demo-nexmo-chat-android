@@ -42,6 +42,10 @@ class NexmoApp : Application() {
         }
     }
 
+    fun logout() {
+        conversationClient = ConversationClient.ConversationClientBuilder().context(this).build()
+    }
+
     fun showInfo(text: String) {
         Log.e(TAG, text)
         showToast(text, Toast.LENGTH_SHORT)

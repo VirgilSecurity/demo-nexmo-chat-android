@@ -6,6 +6,7 @@ import android.util.Log
 import com.virgilsecurity.chat.nexmo.NexmoApp
 import com.virgilsecurity.chat.nexmo.db.model.User
 import com.virgilsecurity.chat.nexmo.exceptions.GetVirgilTokenException
+import com.virgilsecurity.chat.nexmo.http.NexmoServerApi
 import com.virgilsecurity.chat.nexmo.http.model.CSR
 import com.virgilsecurity.sdk.client.VirgilAuthClient
 import com.virgilsecurity.sdk.client.VirgilClientContext
@@ -70,7 +71,7 @@ class VirgilFacade {
         val csr = CSR(virgilCard.export())
         val response = NexmoApp.instance.serverClient.signup(csr).execute()
         if (!response.isSuccessful) {
-            throw Exception(response.message())
+            throw Exception(NexmoServerApi.parseError(response).message)
         }
         var registrationData = response.body()!!
 
@@ -99,7 +100,7 @@ class VirgilFacade {
         // Get JWT
         val response = NexmoApp.instance.serverClient.jwt("Bearer ${virgilToken}").execute()
         if (!response.isSuccessful) {
-            throw Error(response.message())
+            throw Error(NexmoServerApi.parseError(response).message)
         }
         // Initialize facade with current user credentials
         init(userName, user.virgilCard, user.virgilKey)

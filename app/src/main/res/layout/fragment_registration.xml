@@ -37,6 +37,7 @@
             android:id="@+id/agreements"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorLink="@color/link_text_color"
             android:text="@string/registration_agreements"/>
 
     </android.support.v7.widget.LinearLayoutCompat>

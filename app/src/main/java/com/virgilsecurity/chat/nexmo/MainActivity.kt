@@ -12,6 +12,8 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.nexmo.sdk.conversation.client.event.NexmoAPIError
+import com.nexmo.sdk.conversation.client.event.RequestHandler
 import com.virgilsecurity.chat.nexmo.adapters.ConversationsRecyclerViewAdapter
 import com.virgilsecurity.chat.nexmo.fragments.ContactsFragment
 import com.virgilsecurity.chat.nexmo.fragments.ConversationsFragment
@@ -58,13 +60,13 @@ class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragme
                     showConversations()
                     drawerLayout!!.closeDrawers()
                 }
-                R.id.option_settings -> {
-                    Toast.makeText(applicationContext, "Not implemented yet", Toast.LENGTH_SHORT).show()
-                    drawerLayout!!.closeDrawers()
+                R.id.option_logout -> {
+                    logout()
                 }
             }
             true
         }
+
         drawerLayout = findViewById(R.id.drawer)
         val actionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             override fun onDrawerClosed(v: View?) {
@@ -77,6 +79,21 @@ class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragme
         }
         drawerLayout!!.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
+    }
+
+    private fun logout() {
+        NexmoApp.instance.conversationClient.logout(object: RequestHandler<Any> {
+            override fun onSuccess(result: Any?) {
+                Log.d(TAG, "Logout complete")
+                NexmoApp.instance.logout()
+                openLogin()
+            }
+
+            override fun onError(apiError: NexmoAPIError?) {
+                Log.e(TAG, "Logout error", apiError)
+            }
+
+        })
     }
 
     override fun onContactSelectedFragmentInteraction(item: NexmoUser) {
@@ -94,6 +111,10 @@ class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragme
         startActivity(intent)
     }
 
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+    }
+
     private fun showContacts() {
         title = getString(R.string.title_contacts)
         showFragment(ContactsFragment.newInstance())
@@ -109,5 +130,11 @@ class MainActivity : AppCompatActivity(), ContactsFragment.OnSelectContactFragme
                 .beginTransaction()
                 .replace(R.id.content, fragment, "rageComicList")
                 .commit()
+    }
+
+    private fun openLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -47,8 +49,11 @@ class RegistrationFragment : Fragment(), RegistrationListener {
             // Register new User
             registrationTask = RegistrationAsyncTask()
             registrationTask!!.listener = this
-            registrationTask!!.execute(username.text.toString())
+            registrationTask!!.execute(username.text.toString().trim())
         }
+
+        agreements.setMovementMethod(LinkMovementMethod.getInstance());
+
     }
 
     override fun onAttach(context: Context) {

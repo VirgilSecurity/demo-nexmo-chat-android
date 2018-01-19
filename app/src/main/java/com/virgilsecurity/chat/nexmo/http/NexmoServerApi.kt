@@ -1,5 +1,6 @@
 package com.virgilsecurity.chat.nexmo.http
 
+import com.google.gson.Gson
 import com.virgilsecurity.chat.nexmo.http.model.*
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -7,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 
 interface NexmoServerApi {
 
@@ -15,7 +17,7 @@ interface NexmoServerApi {
     fun signup(@Body csr: CSR): Call<RegistrationResult>
 
     @GET("users")
-    fun getUsers(@Header("Authorization") authHeader: String): Call<List<NexmoUser>>
+    fun getUsers(@Header("Authorization") authHeader: String): Call<MutableList<NexmoUser>>
 
     @POST("conversations")
     @Headers("Content-Type: application/json")
@@ -31,6 +33,7 @@ interface NexmoServerApi {
     fun jwt(@Header("Authorization") authHeader: String): Call<JWT>
 
     companion object Factory {
+
         fun create(): NexmoServerApi {
             val logging = HttpLoggingInterceptor()
             logging.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -45,6 +48,14 @@ interface NexmoServerApi {
                     .build()
 
             return retrofit.create(NexmoServerApi::class.java);
+        }
+
+        fun <T> parseError(response: Response<T>): APIError {
+            try {
+                return Gson().fromJson(response.errorBody()?.string(), APIError::class.java);
+            } catch (e: Exception) {
+                return APIError(-1, -1, "Unknown error")
+            }
         }
     }
 }

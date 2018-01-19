@@ -38,6 +38,7 @@ class ConversationActivity : AppCompatActivity() {
     var mMemberCard: CardModel? = null
     var mSubscriptions: SubscriptionList = SubscriptionList()
     var conversationAttached = false
+    private var sendingMessage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,6 +132,7 @@ class ConversationActivity : AppCompatActivity() {
     }
 
     private fun initConversation() {
+        joinConversationInNotJoined()
         attachConversation()
         AsyncTask.execute {
             initMembers()
@@ -163,6 +165,22 @@ class ConversationActivity : AppCompatActivity() {
         })
     }
 
+    private fun joinConversationInNotJoined() {
+        if (mConversation?.getMember(mConversation?.memberId)?.joinedAt == null) {
+            Log.d(TAG, "Join user to conversation ${mConversation?.conversationId}")
+            mConversation?.join(object : RequestHandler<Member> {
+                override fun onError(apiError: NexmoAPIError?) {
+                    Log.d(TAG, "User NOT joined to conversation ${mConversation?.conversationId}")
+                }
+
+                override fun onSuccess(result: Member?) {
+                    Log.d(TAG, "User joined to conversation ${mConversation?.conversationId}")
+                }
+
+            })
+        }
+    }
+
     private fun attachConversation() {
         Log.d(TAG, "Attach conversation ${mConversation?.conversationId}")
         mConversation?.let {
@@ -190,7 +208,7 @@ class ConversationActivity : AppCompatActivity() {
 
     private fun sendMessage() {
         val text = message.text.toString()
-        if (text.isBlank()) {
+        if (sendingMessage || text.isBlank()) {
             return
         }
         Log.d(TAG, "Send message: ${text}")
@@ -198,6 +216,7 @@ class ConversationActivity : AppCompatActivity() {
             AsyncTask.execute {
                 try {
                     val encryptedMessage = VirgilFacade.instance.encrypt(text, mMemberCard!!)
+                    sendingMessage = true
                     mConversation?.sendText(encryptedMessage, object : RequestHandler<Event> {
                         override fun onSuccess(result: Event?) {
                             Log.v(TAG, "Message '${text}' sent as encrypted: ${encryptedMessage}")
@@ -207,10 +226,12 @@ class ConversationActivity : AppCompatActivity() {
                             messageDao.insert(msg)
                             mHandler.post {
                                 message.setText("")
+                                sendingMessage = false
                             }
                         }
 
                         override fun onError(apiError: NexmoAPIError?) {
+                            sendingMessage = false
                             Log.e(TAG, "Send message error", apiError)
                             apiError?.message?.let {
                                 NexmoApp.instance.showError(apiError!!.message!!)
@@ -236,12 +257,15 @@ class ConversationActivity : AppCompatActivity() {
             Log.v(TAG, "Message ${textMessage.id} was sent by myself")
             val hash = textMessage.text.hashCode().toString()
             message = messageDao.getMessage(mConversation!!.conversationId, hash)
-            // Remove cached message in database
-            messageDao.delete(mConversation!!.conversationId, hash)
 
-            // Set new ID for message
-            message.messageId = textMessage.id
-            message.date = textMessage.timestamp
+            if (message != null) {
+                // Remove cached message in database
+                messageDao.delete(mConversation!!.conversationId, hash)
+
+                // Set new ID for message
+                message.messageId = textMessage.id
+                message.date = textMessage.timestamp
+            }
         } else {
             // Message from other conversation member
             Log.v(TAG, "Message ${textMessage.id} was sent by ${textMessage.member.userId}")
@@ -261,10 +285,12 @@ class ConversationActivity : AppCompatActivity() {
                         textMessage.member.userId, text, textMessage.timestamp)
             }
         }
-        mMessages.add(message)
+        message?.let {
+            mMessages.add(message!!)
 
-        // Save message in database
-        messageDao.insert(message)
+            // Save message in database
+            messageDao.insert(message!!)
+        }
 
         mHandler.post {
             mAdapter?.notifyDataSetChanged()

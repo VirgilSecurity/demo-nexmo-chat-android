@@ -47,10 +47,18 @@ class ContactsFragment : Fragment() {
                 var users = response.body()
                 users?.let {
                     Log.d(TAG, "${users.size} users found")
+                    // Add all users except myself
                     mUsersList.clear()
-                    mUsersList.addAll(users)
+                    val myId = NexmoApp.instance.conversationClient.user?.userId
+                    users.forEach {
+                        if (!myId.equals(it.id)) {
+                            mUsersList.add(it)
+                        }
+                    }
+                    // Sort users by name
                     mUsersList.sortWith(compareBy(NexmoUser::name))
 
+                    // Show users in list
                     mHandler.post {
                         mAdapter?.notifyDataSetChanged()
                     }
