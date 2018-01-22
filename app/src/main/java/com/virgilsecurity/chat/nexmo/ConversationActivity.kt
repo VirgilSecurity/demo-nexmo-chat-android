@@ -132,7 +132,7 @@ class ConversationActivity : AppCompatActivity() {
     }
 
     private fun initConversation() {
-        joinConversationInNotJoined()
+        joinConversationIfNotJoined()
         attachConversation()
         AsyncTask.execute {
             initMembers()
@@ -165,7 +165,7 @@ class ConversationActivity : AppCompatActivity() {
         })
     }
 
-    private fun joinConversationInNotJoined() {
+    private fun joinConversationIfNotJoined() {
         if (mConversation?.getMember(mConversation?.memberId)?.joinedAt == null) {
             Log.d(TAG, "Join user to conversation ${mConversation?.conversationId}")
             mConversation?.join(object : RequestHandler<Member> {

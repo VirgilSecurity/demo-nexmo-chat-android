@@ -119,17 +119,17 @@ class VirgilFacade {
     }
 
     fun encrypt(text: String, recipientCard: CardModel): String {
-        var secureSession = secureChat!!.activeSession(recipientCard.getId());
+        var secureSession = secureChat!!.activeSession(recipientCard.getId())
         if (secureSession == null) {
-            secureSession = secureChat!!.startNewSession(recipientCard, null);
+            secureSession = secureChat!!.startNewSession(recipientCard, null)
         }
-        val encryptedText = secureSession.encrypt(text);
+        val encryptedText = secureSession.encrypt(text)
         return encryptedText
     }
 
     fun decrypt(encryptedMessage: String, senderCard: CardModel): String {
-        var secureSession = secureChat!!.loadUpSession(senderCard, encryptedMessage, null);
-        return secureSession.decrypt(encryptedMessage);
+        var secureSession = secureChat!!.loadUpSession(senderCard, encryptedMessage, null)
+        return secureSession.decrypt(encryptedMessage)
     }
 
     @Throws(GetVirgilTokenException::class)
