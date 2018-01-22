@@ -7,7 +7,7 @@
 
 ## Register new user
 
-First of all you should generate private key and create Virgil Card based on it.
+First of all, you should generate a Private Key and create Virgil Card based on it.
 
 ```kotlin
 // Generate private key
@@ -20,7 +20,7 @@ val virgilCard = virgilApi.getCards().create(userName, virgilKey,
     "name", customFields)
 ```
 
-You need Application Private key to create Virgil Card. Since you shouldn't store Application Key on mobile devices, Virgil Card should be created on server side.
+You need Application Private Key to create Virgil Card. Since you shouldn't store Application Key on mobile devices, Virgil Card should be created on the server side.
 Demo Application creates Virgil Card during registration.
 
 ```kotlin
@@ -29,9 +29,9 @@ val response = NexmoApp.instance.serverClient.signup(csr).execute()
 var registrationData = response.body()!!
 ```
 
-registrationData also counatins JWT which should be used to login Nexmo with `ConversationClient`.
+registrationData also contains JWT which should be used to login Nexmo with `ConversationClient`.
 
-Your mobile App is only place where your Private Key stored. So, you should store Private Key for future use. If you lose your Private Key, your won't be able to decrypt messages sent to you.
+Your mobile App is the only place where your Private Key is stored. So, you should store Private Key for future use. If you lose your Private Key, you won't be able to decrypt messages sent to you.
 
 ```kotlin
 NexmoApp.instance.db.userDao().insert(User(registrationData.user.id,
@@ -62,7 +62,7 @@ secureChat?.rotateKeys(10)
 
 ## Login
 
-Obtain Virgil authentication token from server. See flow details by the [link](https://github.com/VirgilSecurity/virgil-services-auth).
+Obtain Virgil authentication token from the server. See the flow details by the [link](https://github.com/VirgilSecurity/virgil-services-auth).
 
 ```kotlin
 // Get challenge message
@@ -82,7 +82,7 @@ val newEncryptedMessage =
 
 val message = ConvertionUtils.toBase64String(newEncryptedMessage)
 
-// Send acknolegge to auth server
+// Send acknowledge to auth server
 val code = this.authClient.acknowledge(
     challengeMessage.authorizationGrantId, message)
 
@@ -102,7 +102,7 @@ val jwt = response.body()!!.jwt
 
 ## Load users
 
-Load list of registered users.
+Load the list of registered users.
 
 ```kotlin
 val virgilToken = VirgilFacade.instance.getVirgilToken()
@@ -141,7 +141,7 @@ conversationClient.newConversation(true, userName,
 })
 ```
 
-You need Virgil Card of user your are starting conversation with.
+You need a Virgil Card of the user you are starting conversation with.
 
 ```kotlin
 val userName = NexmoUtils.getConversationPartner(mConversation!!)?.name
@@ -167,9 +167,9 @@ if (secureSession == null) {
 val encryptedText = secureSession.encrypt(text);
 ```
 
-#### Send message to conversation
+#### Send a message to the conversation
 
-You can't decrypt the message which was encrypted by yourself. Thus, you should store original message text locally. Use encrypted text hash code to identify outcome message.
+You can't decrypt the message which was encrypted by you. Thus, you should store the original message text locally. Use an encrypted text hash code to identify outcome message.
 
 ```kotlin
 mConversation?.sendText(encryptedMessage,
@@ -192,19 +192,19 @@ mConversation?.sendText(encryptedMessage,
 
 #### Decrypting message
 
-Let's identify message sender first.
+Let's identify the message sender first.
 
 ```kotlin
 if (conversationClient.user.userId.equals(textMessage.member.userId)) {
     // This message was sent by myself. Find in database
     ....
 } else {
-   // Message from other conversation member
+   // Message from another conversation member
    ...
 }
 ```
 
-If message sent by myselft, just get it from database by encrypted text hash code.
+If a message is sent by you, just get it from the database by encrypted text hash code.
 
 ```kotlin
 val hash = textMessage.text.hashCode().toString()
@@ -212,7 +212,7 @@ val message = messageDao.getMessage(mConversation!!.conversationId, hash)
 val decryptedText = message.text
 ```
 
-If message sent by other member, let's decrypt it with Virgil PFS.
+If a message is sent by another member, let's decrypt it with Virgil PFS.
 
 ```kotlin
 // Loadup user session
