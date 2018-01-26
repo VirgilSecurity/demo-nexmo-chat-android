@@ -20,8 +20,8 @@ Virgil's End-to-End Encryption tech enables Nexmo developers to ignore all these
 
 **For an intro, this is how we’ll upgrade the Nexmo Android app to be End-to-End Encrypted:**
 1. During sign-up: we’ll generate the individual private & public keys for new users (remember: the recipient's public key encrypts messages and the matching recipient's private key decrypts them).
-2. Before sending messages, we’ll encrypt chat messages with the recipient's ever-changing public keys. Virgil's Perfect Forward Secrecy is the technology behind revolving encryption keys for every message: to make sure that future conversations are not compromised with a key that's accidentally leaked.
-3. After receiving messages, we’ll decrypt chat messages with the recipient's ever-changing private keys.
+1. Before sending messages, we’ll encrypt chat messages with the recipient's ever-changing public keys. Virgil's Perfect Forward Secrecy is the technology behind revolving encryption keys for every message: to make sure that future conversations are not compromised with a key that's accidentally leaked.
+1. After receiving messages, we’ll decrypt chat messages with the recipient's ever-changing private keys.
 
 ![Virgil E2EE](https://github.com/VirgilSecurity/chat-back4app-android/blob/master/img/virgil_main.png)
 *Note: image needs to be updated, it's directly referred from Back4App project*
@@ -39,7 +39,7 @@ We’ll publish the users’ public keys to Virgil’s Cards Service so that cha
 
 * Java 7+
 * [Android Studio](https://developer.android.com/studio/index.html)
-* Node.js 6+?
+* [Application API server](https://github.com/VirgilSecurity/demo-nexmo-server)
 
 ## Sign up for Nexmo & Virgil accounts
 
@@ -48,14 +48,25 @@ We’ll publish the users’ public keys to Virgil’s Cards Service so that cha
 - Sign up for a [Virgil Security account][_virgil_account]
 - Create a new app & token
 
-## Deploy WebHook
+## Install Application API server
 
-- Needed?
+Application API server is already installed and available by the [link](https://auth-nexmo.virgilsecurity.com/)
 
 ## Import Project in Android Studio:
   - File -> New -> Project from Version Control -> Git
   - Git Repository URL: https://github.com/VirgilSecurity/demo-nexmo-android
   - Check out the “master” branch
+
+### Configure mobile application
+
+Open VirgilFacade class and define constants from the table below
+
+| Constant name | Description |
+| --- | --- |
+| VIRGIL_ACCESS_TOKEN | Your's Virgil Application access token. You should generate this token on the [dashboard](https://developer.virgilsecurity.com/account/dashboard/) or use the existing one |
+| VIRGIL_APP_PUBLIC_KEY | Your's Virgil Application public key as Base64-encoded string |
+| VIRGIL_AUTH_PUBLIC_KEY | Virgil Authentication server public key as Base64-encoded string |
+| AUTH_SERVER_URL | Application API server URL |
 
 # Code overview
 
